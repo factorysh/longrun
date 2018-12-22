@@ -6,9 +6,11 @@ Handling long run rpc call.
 Goals
 ------
 
+Handling long rpc call, without blocking, without polling.
+
  * Local RPC with UNIX or TCP socket
  * Distant RPC with HTTP
- * RPC can be fire and forget or streaming response
+ * RPC can be "fire and forget" or streaming responses
  * RPC can be canceled
  * Server is async, client can be sync
  * Golang, python, javascript languages
@@ -35,3 +37,8 @@ Reference implementation
 
 [JSON-RPC2](https://www.jsonrpc.org/specification) with two transports : HTTP
 and pascal string with UNIX socket.
+
+Licence
+-------
+
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
