@@ -58,7 +58,7 @@ States are:
 Attributes:
 
  * *id*: rank
- * *value*: for *running* state
+ * *value*
  * *state*
 
 Reference implementation
