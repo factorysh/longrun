@@ -31,6 +31,29 @@ Flow
         |<---------------|
         ...
 
+### Call
+
+A call is a [Finite-state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
+
+A call has an unique ID, something like UUID v4 (random), hard to guess.
+
+A call has a *Time To Live*.
+
+A call can be canceled.
+
+### Events
+
+Events describe change in states.
+
+Events are ordered, and typed (its state).
+
+States are :
+
+ * queued (implicit first state)
+ * running (more than one running state is possible)
+ * canceled
+ * error
+ * success
 
 Reference implementation
 ------------------------
