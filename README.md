@@ -31,6 +31,10 @@ Flow
         |<---------------|
         ...
 
+The communication is async, the server doesn't wait client.
+Client can only do the first step.
+If client is slow, and server fast, the response will contain more than one events.
+
 ### Methods
 
 #### longrun.next(id, n) -> [events]
