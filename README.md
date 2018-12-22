@@ -47,13 +47,19 @@ Events describe change in states.
 
 Events are ordered, and typed (its state).
 
-States are :
+States are:
 
  * queued (implicit first state)
  * running (more than one running state is possible)
  * canceled
  * error
  * success
+
+Attributes:
+
+ * *id*: rank
+ * *value*: for *running* state
+ * *state*
 
 Reference implementation
 ------------------------
