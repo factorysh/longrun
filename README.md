@@ -49,17 +49,17 @@ Events are ordered, and typed (its state).
 
 States are:
 
- * queued (implicit first state)
- * running (more than one running state is possible)
- * canceled
- * error
- * success
+ * **queued** (implicit first state)
+ * **running** (more than one running state is possible)
+ * **canceled**
+ * **error**
+ * **success**
 
 Attributes:
 
- * *id*: rank
- * *value*
- * *state*
+ * **id**: rank
+ * **value**
+ * **state**
 
 Reference implementation
 ------------------------
