@@ -31,6 +31,18 @@ Flow
         |<---------------|
         ...
 
+### Methods
+
+#### longrun.next(id, n) -> [events]
+
+**id** call id
+
+**n** latest known event
+
+#### longrun.cancel(id)
+
+**id** call id
+
 ### Call
 
 A call is a [Finite-state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
