@@ -25,7 +25,7 @@ It works with `curl`.
         | POST /{object}/      |
         | JSON body            |
     rpc |--------------------->|
-        |  rpc_id, Location    | fast response with a unique ID
+        |  rpc_id, Location    | fast response with a unique ID with a 303 status
         |<---------------------|
         | GET /{object}/{id}   | ask for events
         | Last-Event-Id header | since 0
@@ -49,7 +49,7 @@ If client is slow, and server fast, the response will contain more than one even
         | POST /{object}/      |
         | JSON body            |
     rpc |--------------------->|
-        |  rpc_id, Location    | fast response with a unique ID
+        |  rpc_id, Location    | fast response with a unique ID with a 303 status
         |<---------------------|
         | GET /{object}/{id}   | ask for events
         |--------------------->|
