@@ -1,14 +1,13 @@
 Long run
 ========
 
-Handling long run rpc call.
+Handling long run REST call.
 
 Goals
 ------
 
-Handling long rpc call, without blocking, without polling.
+Handling long REST call, without blocking, without polling.
 
- * Local RPC with UNIX or TCP socket
  * Distant RPC with HTTP
  * RPC can be "fire and forget" or streaming responses
  * RPC can be canceled
@@ -18,44 +17,66 @@ Handling long rpc call, without blocking, without polling.
 Flow
 ----
 
-    rpc |--------------->|
-        |  rpc_id        | fast response with a unique ID
-        |<---------------|
-        | next(rpc_id, 0)| ask for events, since 0
-        |--------------->|
-        | [events]       | wait for new event, events can be a batch of events
-        |<---------------|
-        | next(rpc_id, n)| ask for new events
-        |--------------->|
-        | [events]       | more events
-        |<---------------|
+### Polling
+
+You can be old fashioned, with long polling.
+It works with `curl`.
+
+        | POST /{object}/      |
+        | JSON body            |
+    rpc |--------------------->|
+        |  rpc_id, Location    | fast response with a unique ID with a 303 status
+        |<---------------------|
+        | GET /{object}/{id}   | ask for events
+        | Last-Event-Id header | since 0
+        |--------------------->|
+        | [events]             | 
+        |<---------------------|
+        | GET /{object}/{id}   | ask for events
+        | Last-Event-Id header | since last id
+        |--------------------->|
+        | [events]             | 
         ...
+
+`last-event-id` can be a header, or a query argument.
 
 The communication is async, the server doesn't wait client.
 Client can only do the first step.
 If client is slow, and server fast, the response will contain more than one events.
 
+### Server Sent Event
+
+        | POST /{object}/      |
+        | JSON body            |
+    rpc |--------------------->|
+        |  rpc_id, Location    | fast response with a unique ID with a 303 status
+        |<---------------------|
+        | GET /{object}/{id}   | ask for events
+        |--------------------->|
+        | event                |
+        |<---------------------|
+        | event                |
+        |<---------------------|
+        | event                |
+        |<---------------------|
+        | event                |
+        |<---------------------|
+        ...
+
+[SSE](https://html.spec.whatwg.org/multipage/server-sent-events.html) is a very simple streaming workflow : with a GET request, the response is a streamed text, using lines (with `\n`), and blank line for ending an event message.
+
+Client ask for a run, with a POST http request, the arguments are a map, JSON serialized, in the body of the request. The JSON response return the run id.
+The default response use a `201 Created` status. If the request has the header `accept: text/event-stream`, the response with a `303 See other` with a `Location: ` to the run endpoint.
+
 ### Methods
 
-#### longrun.next(id, n) -> [events]
+`POST` Ask something, it creates a run.
 
-**id** call id
+`GET` subscribe to run events. Multiple connections can watch a single run.
 
-**n** latest known event
+`HEAD` ask if a run exists.
 
-#### longrun.cancel(id)
-
-**id** call id
-
-### Call
-
-A call is a [Finite-state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
-
-A call has an unique ID, something like UUID v4 (random), hard to guess.
-
-A call has a *Time To Live*.
-
-A call can be canceled.
+`DELETE` cancel a run.
 
 ### Events
 
@@ -76,12 +97,6 @@ Attributes:
  * **id**: rank
  * **value**
  * **state**
-
-Reference implementation
-------------------------
-
-[JSON-RPC2](https://www.jsonrpc.org/specification) with two transports : HTTP
-and pascal string with UNIX socket.
 
 Licence
 -------
