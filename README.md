@@ -63,6 +63,11 @@ If client is slow, and server fast, the response will contain more than one even
         |<---------------------|
         ...
 
+[SSE](https://html.spec.whatwg.org/multipage/server-sent-events.html) is a very simple streaming workflow : with a GET request, the response is a streamed text, using lines (with `\n`), and blank line for ending an event message.
+
+Client ask for a run, with a POST http request, the arguments are a map, JSON serialized, in the body of the request. The JSON response return the run id.
+The default response use a `201 Created` status. If the request has the header `accept: text/event-stream`, the response with a `303 See other` with a `Location: ` to the run endpoint.
+
 ### Methods
 
 `POST` Ask something, it creates a run.
